@@ -17,7 +17,7 @@ The rules continue to be applied repeatedly to create further generations.
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
-<<<<<<< HEAD
+
 
 const int gridsize = 75; //Making this a global constant to avoid array issues.
 
@@ -62,9 +62,6 @@ void liveOrDie(bool grid[gridsize+1][gridsize+1]){
         }
     }
 }
-
-=======
->>>>>>> dd6e4678aed7b4c22c557a7469e9732270f92a9d
 
 int main(){
 
