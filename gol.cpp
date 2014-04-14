@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
-bool death(bool);
 
 int main(){
 
