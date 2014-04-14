@@ -1,9 +1,10 @@
-#include <iostream>
-#include <cstdlib>
 #include <algorithm>
-#include <thread>
 #include <chrono>
+#include <cstdlib>
+#include <iostream>
+#include <thread>
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 class Grid {
     // not using vector<bool> because it is rather strange
@@ -53,6 +54,7 @@ public:
 int main() {
     const int gridsize = 50;
     Grid grid(gridsize+1, gridsize+1);
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Game of Life");
 
     std::vector<std::pair<int, int>> starting = {
         {gridsize/2, gridsize/2},
@@ -62,24 +64,29 @@ int main() {
         {gridsize/2 + 1, gridsize/2 + 1}
     };
 
-    for (auto e : starting) {
+    for (auto e : starting)
         grid.set(e.first, e.second);
-        std::cout << e.first << " " << e.second << "\n";
-    }
 
-    while (true){
+    while (window.isOpen()){
+        sf::Event event;
+        while (window.pollEvent(event))
+            if (event.type == sf::Event::Closed)
+                window.close();
+
         Grid copy = grid;
 
+        window.clear(sf::Color::Black);
         //This is our display.
         for (int a = 1; a < gridsize; ++a){
             for (int b = 1; b < gridsize; ++b){
-                if (grid.get(a, b))
-                    std::cout << " *";
-                else
-                    std::cout << "  ";
+                if (grid.get(a, b)) {
+                    sf::RectangleShape rectangle(sf::Vector2f{10, 10});
+                    rectangle.setPosition(10*a, 10*b);
+                    window.draw(rectangle);
+                }
             }
-            std::cout << std::endl;
         }
+        window.display();
 
         for (int a = 1; a < gridsize; ++a) {
             for (int b = 1; b < gridsize; ++b) {
@@ -96,8 +103,6 @@ int main() {
                     grid.set(a, b);
             }
         }
-        // Don't use system("CLS"), that's not portable.
-        std::cout << "\n\n\n";
-        std::this_thread::sleep_for(std::chrono::nanoseconds{1'000});
+        std::this_thread::sleep_for(std::chrono::nanoseconds{100'000});
     }
 }
