@@ -10,14 +10,13 @@ At each step in time, the following transitions occur:
     4)Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
 The initial pattern constitutes the seed of the system.
-The first generation is created by applying the above rules simultaneously to every cell in the seed—births and deaths occur simultaneously,
+The first generation is created by applying the above rules simultaneously to every cell in the seedï¿½births and deaths occur simultaneously,
 and the discrete moment at which this happens is sometimes called a tick (in other words, each generation is a pure function of the preceding one).
 The rules continue to be applied repeatedly to create further generations.
 */
 #include <iostream>
 #include <cstdlib>
 #include <algorithm>
-<<<<<<< HEAD
 
 const int gridsize = 75; //Making this a global constant to avoid array issues.
 
@@ -62,9 +61,6 @@ void liveOrDie(bool grid[gridsize+1][gridsize+1]){
         }
     }
 }
-
-=======
->>>>>>> dd6e4678aed7b4c22c557a7469e9732270f92a9d
 
 int main(){
 
