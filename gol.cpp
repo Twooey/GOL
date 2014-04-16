@@ -10,17 +10,36 @@ At each step in time, the following transitions occur:
     4)Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
 The initial pattern constitutes the seed of the system.
-The first generation is created by applying the above rules simultaneously to every cell in the seed births and deaths occur simultaneously,
+The first generation is created by applying the above rules simultaneously to every cell in the seed—births and deaths occur simultaneously,
 and the discrete moment at which this happens is sometimes called a tick (in other words, each generation is a pure function of the preceding one).
 The rules continue to be applied repeatedly to create further generations.
 */
 #include <iostream>
-#include <cstdlib>
-#include <algorithm>
+#include <chrono>
+#include <thread>
 
 
-const int gridsize = 75; //Making this a global constant to avoid array issues.
+//#include <cstdlib>
+#include <SFML/Graphics.hpp>
 
+const int gridsize = 300; //Making this a global constant to avoid array issues.
+
+
+void Display(sf::RenderWindow& window, bool grid[gridsize+1][gridsize+1]) {
+    window.clear(sf::Color::Black);
+    for (std::size_t a = 1; a < gridsize- 1; ++a){
+        for (std::size_t b = 1; b < gridsize - 1; ++b){
+            if (grid[a][b]) {
+                sf::RectangleShape rectangle(sf::Vector2f{3, 3});
+                rectangle.setPosition(3*a, 3*b);
+                window.draw(rectangle);
+            }
+        }
+    }
+    window.display();
+}
+
+/*
 void Display(bool grid[gridsize+1][gridsize+1]){
     for(int a = 1; a < gridsize; a++){
         for(int b = 1; b < gridsize; b++){
@@ -31,11 +50,12 @@ void Display(bool grid[gridsize+1][gridsize+1]){
                 std::cout << "  ";
             }
             if(b == gridsize-1){
-                std::cout << std::endl;
+                std::cout << " \n";
             }
         }
     }
 }
+*/
 //This copy's the grid for comparision purposes.
 void CopyGrid (bool grid[gridsize+1][gridsize+1],bool grid2[gridsize+1][gridsize+1]){
     for(int a =0; a < gridsize; a++){
@@ -63,23 +83,35 @@ void liveOrDie(bool grid[gridsize+1][gridsize+1]){
     }
 }
 
+
 int main(){
 
+    sf::RenderWindow window(sf::VideoMode(gridsize*3+100, gridsize*3+100), "Conway's Game of Life");
+    std::cout.sync_with_stdio(false);
     //const int gridsize = 50;
     bool grid[gridsize+1][gridsize+1] = {};
 
     //Still have to manually enter the starting cells.
-    grid[gridsize/2][gridsize/2] = true;
-    grid[gridsize/2-1][gridsize/2] = true;
-    grid[gridsize/2][gridsize/2+1] = true;
-    grid[gridsize/2][gridsize/2-1] = true;
-    grid[gridsize/2+1][gridsize/2+1] = true;
+    int md = gridsize/2;
+    grid[md/2][md/2] = true;
+    grid[md/2-2][md/2-1] = true;
+    grid[md/2-3][md/2-1] = true;
+    grid[md/2+1][md/2-1] = true;
+    grid[md/2+2][md/2-1] = true;
+    grid[md/2+3][md/2-1] = true;
+    grid[md/2-2][md/2+1] = true;
+
+
 
     while (true){
+        int counter = 0;
         //The following copies our grid.
 
-        Display(grid);     //This is our display.
+        Display(window, grid);     //This is our display.
         liveOrDie(grid); //calculate if it lives or dies.
-        system("CLS");
+//        ++counter;
+//        system("CLS");
+    std::this_thread::sleep_for(std::chrono::nanoseconds{'100'});
+
     }
 }
